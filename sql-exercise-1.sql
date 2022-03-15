@@ -27,7 +27,7 @@ select
   (select unitname from unit where unitid = e1.unit) as unitname
 from (
   -- get each placement in a unit only once
-  select distinct e3.* from emp e3
+  select distinct e2.* from emp e2
 ) as e1
 group by e1.firstname, e1.lastname
 having count(e1.firstname & e1.lastname) = 2;
