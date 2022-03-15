@@ -32,6 +32,37 @@ insert into organization values(25, "Southern Area", 10, 23);
         i.e. level1, level2 ...
 */
 
+-- level 1 root node
+select
+  o1.organization_name as level1,
+  null as level2,
+  null as level3,
+  null as level4
+from organization o1
+where o1.parent_organization_id is null
+-- add level 2, no duplicates
+union
+select
+  o1.organization_name as level1,
+  o2.organization_name as level2,
+  null as level3,
+  null as level4
+from organization o1
+left join organization o2 on o2.parent_organization_id = o1.organization_id
+where o1.parent_organization_id is null
+-- add level 3
+union
+select
+  o1.organization_name as level1,
+  o2.organization_name as level2,
+  o3.organization_name as level3,
+  null as level4
+from organization o1
+left join organization o2 on o2.parent_organization_id = o1.organization_id
+left join organization o3 on o3.parent_organization_id = o2.organization_id
+where o1.parent_organization_id is null
+-- add level 4
+union
 select
   o1.organization_name as level1,
   o2.organization_name as level2,
@@ -41,4 +72,6 @@ from organization o1
 left join organization o2 on o2.parent_organization_id = o1.organization_id
 left join organization o3 on o3.parent_organization_id = o2.organization_id
 left join organization o4 on o3.parent_organization_id = o3.organization_id
-where o1.parent_organization_id is null;
+where o1.parent_organization_id is null
+-- alphabetical order
+order by o2.organization_name, o3.organization_name, o4.organization_name;
