@@ -28,6 +28,8 @@ select
 from (
   -- get each placement in a unit only once
   select distinct e2.* from emp e2
+  -- report the last position
+  order by rowid desc
 ) as e1
 group by e1.firstname, e1.lastname
-having count(e1.firstname & e1.lastname) = 2;
+having count(e1.firstname & e1.lastname) >= 2;
